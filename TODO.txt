@@ -1,9 +1,18 @@
 TODO:
 
+
+0. Totally rework player data storing system ~ In progress (@R1senDev)
+
 1. Add cool new stuff to the store ~ Partially completed
+
 2. Make mechanics with dungeon floors ~ Not completed
+
 3. Make combat and randomization mechanics of mobs ~ Not completed
+
 4. Mechanics of the store, shopping ~ Not completed
+
 4. Remove the second fourth item from TODO ~ Not completed
+
 5. Player Experience System ~ Not completed
+
 6. Achivements System ~ Not completed
