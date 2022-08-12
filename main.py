@@ -1,5 +1,5 @@
 import os
-import tableout
+import tableout as tablo
 
 try:
 	from colorama import init
@@ -15,10 +15,11 @@ def cls():
 
 class Player:
 	def __init__(self):
+        self.maxHp = 100
 		self.hp = 100
 		self.strength = 5
 		self.agility = 0
-		self.money = 100
+		self.money = 20
 		self.level = 0
 		self.xp = 0
 
@@ -53,17 +54,84 @@ class Player:
 				'sellable': False
 			}
 		}
+
 	def getDefense():
 		return self.weapon['head']['defense'] + self.weapon['chest']['defense'] + self.weapon['leggings']['defense'] + self.weapon['boots']['defense'] + self.agility
 
+    def heal(self, hp):
+        self.hp += hp
+        if self.hp > self.maxHp:
+            self.hp = self.maxHp
+
+    def kill(self):
+        pass
+
+    def hurt(self, hp):
+        self.hp -= hp
+        if self.hp <= 0:
+            self.kill()
+
 shop = {
-	'weapon': [{'name': 'Палка', 'damage': 10, 'cost': 5}, {'name': 'Деревянный меч', 'damage': 15, 'cost': 10}],
+	'weapon': [
+        {'name': 'Палка', 'damage': 10, 'cost': 5, 'minLevel': 0},
+        {'name': 'Деревянный меч', 'damage': 15, 'cost': ²0, 'minLevel': 0},
+        {'name': 'Ржавый нож', 'damage': 20, 'cost': 50, 'minLevel': 2},
+    ],
 
-	'head': [{'name': '', 'damage': , 'cost': }], [{'name': '', 'damage': , 'cost': }]
+	'head': [
+        {'name': 'Деревянный шлем', 'defense': 2, 'cost': 20, 'minLevel': 2}
+    ],
 
-	'chest': [{'name': '', 'damage': , 'cost': }], [{'name': '', 'damage': , 'cost': }]
+	'chest': [
+        {'name': 'Деревянный нагрудник', 'defense': 3, 'cost': 30, 'minLevel': 2}
+    ],
 
-	'leggings': [{'name': '', 'damage': , 'cost': }], [{'name': '', 'damage': , 'cost': }]
+	'leggings': [
+        {'name': 'Деревянные поножи', 'defense': 2, 'cost': 20, 'minLevel': 2}
+    ],
 
-	'boots': [{'name': '', 'damage': , 'cost': }], [{'name': '', 'damage': , 'cost': }]
+	'boots': [
+        {'name': 'Деревянные ботинки', 'defense': 1, 'cost': 10, 'minLevel': 2}
+    ]
 }
+
+# List of all mobs existing in game
+mobs = [
+    {
+        'name': 'Гоблин-рекрут',
+        'hp': 100,
+        'damage': [8, 11],
+        'defense': [0, 0],
+        'reward': [5, 10]
+    },
+    {
+        'name': 'Гоблин-громила',
+        'hp': 100,
+        'damage': [10, 12],
+        'defense': [0, 1],
+        'reward': [5, 15]
+    },
+    {
+        'name': 'Гоблин-ловкач',
+        'hp': 100,
+        'damage': [6, 9],
+        'defense': [5, 7],
+        'reward': [10, 15]
+    }
+    {
+        'name': 'Гоблин-страж',
+        'hp': 100,
+        'damage': [10, 15],
+        'defense': [0, 1],
+        'reward': [10, 20]
+]
+
+locations = [
+    {
+        'name': 'Заброшенная шахта',
+        'enemies': [0, 1]
+    },
+    {
+        'name': 'Гоблинский город',
+        'enemies': [0, 1, 2, 3]
+]
