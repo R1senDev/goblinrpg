@@ -5,9 +5,9 @@ TODO:
 
 1. Add cool new stuff to the store ~ Partially completed
 
-2. Make mechanics with dungeon floors ~ Not completed
+2. Make mechanics with dungeon floors ~ In progress (@R1senDev)
 
-3. Make combat and randomization mechanics of mobs ~ Not completed
+3. Make combat and randomization mechanics of mobs ~ In progress (@R1senDev)
 
 4. Mechanics of the store, shopping ~ Not completed
 

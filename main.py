@@ -1,6 +1,7 @@
 import os
 import json
-import tableout as tablo
+from random import randint, choice
+import tableout as tout
 
 def dumpSave():
 	with open('data.json', 'w') as file:
@@ -33,24 +34,47 @@ def cls():
 	elif data['settings']['os'] == 'windows':
 		os.system('cls')
 
+def getPlayerDamage():
+	return data['player']['weapon']['damage'] + data['player']['skills']['strength']
+
 def getPlayerDefense():
 	return data['player']['armor']['head']['defense'] + data['player']['armor']['chest']['defense'] + data['player']['armor']['leggings']['defense'] + data['player']['armor']['boots']['defense'] + data['player']['skills']['agility']
 
 def healPlayer(self, hp):
-	self.hp += hp
-	if self.hp > self.maxHp:
-		self.hp = self.maxHp
+	data['player']['hp'] += hp
+	if data['player']['hp'] > data['player']['maxHp']:
+		data['player']['hp'] = data['player']['maxHp']
+
+def hurtPlayer(self, hp):
+	data['player']['hp'] -= hp
+	if data['player']['hp'] <= 0:
+		self.kill()
 
 def killPlayer(self):
 	pass
 
-def hurtPlayer(self, hp):
-	self.hp -= hp
-	if self.hp <= 0:
-		self.kill()
-
 def xpToNextLevel(self):
-	return 25 * 1.5 ^ (self.level)
+	return 25 * 1.5 ^ (data['player']['level'])
+
+class Enemy:
+	__init__(self, avaliableIds):
+		self.id = choice(avaliableIds)
+		self.hp = mobs[self.id]['hp']
+		self.damage = choice(mobs[self.id]['damage'])
+		self.defense = choice(mobs[self.id]['defense'])
+
+	def hit(self):
+		self.hp -= getPlayerDamage()
+		if randint(1, 100) <= data['player']['skills']['accuracy']:
+			self.hp -= getPlayerDamage()
+		if self.hp <= 0:
+			self.hp = 0
+			self.kill()
+
+	def kill(self):
+		pass
+
+currentEnemy = None
 
 shop = {
 	'weapon': [
@@ -124,14 +148,17 @@ mobs = [
 locations = [
 	{
 		'name': 'Заброшенная шахта',
+		'level': 0,
 		'enemies': [0, 1],
 	},
 	{
 		'name': 'Гоблинский город',
+		'level': 2,
 		'enemies': [0, 1, 2, 3],
 	},
 	{
 		'name': 'Центр города',
+		'level': 5,
 		'enemies': [2, 3, 4, 5],
 	},
 ]
@@ -142,16 +169,80 @@ inp = input('Введи номер пункта, который хочешь в�
 
 cls()
 if inp == '1':
-    print('Куда отправимся?\n\n[1] Сражаться\n[2] Магазин\n[3] О герое\n[0] Главное меню\n\nВведи номер пункта, который хочешь выбрать: ')
+	print('Куда отправимся?\n\n[1] Сражаться\n[2] Магазин\n[3] О герое\n[4] Настройки\n[0] Главное меню\n\nВведи номер пункта, который хочешь выбрать: ')
+	inp = input('Введи номер пункта, который хочешь выбрать: ')
+	if inp = '1':
+		print('Выбери локацию:')
+		for loc in range(len(locations)):
+			if data['player']['level'] >= locations[loc]['level']:
+				print(f'[{loc + 1}] {locations[loc]['name']}')
+				maxLocationId = loc + 1
+			else:
+				print(f'    {locations[loc]['name']} (Откроется на уровне {locations[loc]['level']})')
+				break
+		inp = input('\nВведи номер пункта, который хочешь выбрать: ')
+		if int(inp) <= maxLocationId:
+			currentLocation = int(inp) - 1
+			while inp != '0':
+				currentEnemy = Enemy(locations[currentLocation]['enemies'])
+				print(f'БИТВА!\n{'=' * 10}\nАктивные эффекты:')
+				for effect in data['player']['effects']:
+					print(f'{effect['name']} {effect['value']}')
+				print(f'{'=' * 10}\n{tout.printTable([[]])}')
+		else:
+			# Incorrect input warning
+			pass
+
 elif inp == '2':
-    if data['settings']['coloredOutput'] == "true":
-        inp = input(f'Чтобы начать новую игру, введи следующую фразу:\n\n{Fore.YELLOW}{Style.BRIGHT}Начиная новую игру, я понимаю, что весь мой прогресс будет потерян по причине перезаписи файла сохранения. Также я подтверждаю, что ознакомлен с политикой конфиденциальности, изложенной в файле privacy.md и поставляющейся вместе с данной программой. Ахаллай-махаллай, сим-салабим, сохранянус-удалянус.{Style.NORMAL}{Fore.WHITE}\n\n')
-        if inp == 'Начиная новую игру, я понимаю, что весь мой прогресс будет потерян по причине перезаписи файла сохранения. Также я подтверждаю, что ознакомлен с политикой конфиденциальности, изложенной в файле privacy.md и поставляющейся вместе с данной программой. Ахаллай-махаллай, сим-салабим, сохранянус-удалянус.':
-            pass
-elif inp == '3':
-    print('=== НАСТРОЙКИ ===\nПриятного дня.')
+	if data['settings']['coloredOutput'] == "true":
+		inp = input(f'Чтобы начать новую игру, введи следующую фразу:\n\n{Fore.YELLOW}{Style.BRIGHT}Начиная новую игру, я понимаю, что весь мой прогресс будет потерян по причине перезаписи файла сохранения. Также я подтверждаю, что ознакомлен с политикой конфиденциальности, изложенной в файле privacy.md и поставляющейся вместе с данной программой. Ахаллай-махаллай, сим-салабим, сохранянус-удалянус.{Style.NORMAL}{Fore.WHITE}\n\n')
+		if inp == 'Начиная новую игру, я понимаю, что весь мой прогресс будет потерян по причине перезаписи файла сохранения. Также я подтверждаю, что ознакомлен с политикой конфиденциальности, изложенной в файле privacy.md и поставляющейся вместе с данной программой. Ахаллай-махаллай, сим-салабим, сохранянус-удалянус.':
+			pass
+
+elif inp == '4':
+	print('=== НАСТРОЙКИ ===\nПриятного дня.')
+
 elif inp == '0':
-    inp = input('Куда пошёл?!\n\n[1] "Ладно, ладно, уже возвращаюсь"\n[2] "В терминал"\n\nВведи номер пункта, которвй хочешт выбрать: ')
-    cls()
-    if inp == '2':
-        exit()
+	exit()
+
+elif inp == 'console':
+	print('=== КОНСОЛЬ РАЗРАБОТЧИКА ===\n')
+	comm = ''
+	while comm != 'exit':
+		comm = input('>>> ')
+
+		if comm.split(' ')[0] == 'dump':
+			dumpSave()
+			if data['settings']['coloredOutput'] == "true":
+				print(f'dump: {Fore.GREEN}Success{Fore.WHITE}')
+			else:
+				print('dump: Success')
+
+		elif comm.split(' ')[0] == 'save':
+			print(data)
+
+		elif comm.split(' ')[0] == 'effect':
+			if comm.split(' ')[1] == 'add':
+				data['player']['effects'][comm.split(' ')[2]] = comm.split(' ')[3]
+			elif comm.split(' ')[1] == 'remove':
+				data['player']['effects'][comm.split(' ')[2]] = 0
+			elif comm.split(' ')[1] == 'descrease':
+				data['player']['effects'][comm.split(' ')[2]] -= 1
+			elif comm.split(' ')[1] == 'increase':
+				data['player']['effects'][comm.split(' ')[2]] += 1
+
+		elif comm.split(' ')[0] == 'skill':
+			if comm.split(' ')[1] == 'set':
+				data['player']['skills'][comm.split(' ')[2]] = comm.split(' ')[3]
+			elif comm.split(' ')[1] == 'reset':
+				data['player']['skills'][comm.split(' ')[2]] = 0
+			elif comm.split(' ')[1] == 'descrease':
+				data['player']['skills'][comm.split(' ')[2]] -= 1
+			elif comm.split(' ')[1] == 'increase':
+				data['player']['skills'][comm.split(' ')[2]] += 1
+
+		elif comm.split(' ')[0] == 'exit':
+			pass
+
+		else:
+			print(f'Unknown command "{comm.split(' ')[0]}"')
