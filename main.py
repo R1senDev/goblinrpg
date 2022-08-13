@@ -13,13 +13,13 @@ if data['settings']['coloredOutput'] == 'true' or data['settings']['coloredOutpu
 	try:
 		from colorama import init
 		init()
-		from colorama import Fore, Back
+		from colorama import Fore, Back, Style
 	except:
 		try:
 			os.system('pip install colorama')
 			from colorama import init
 			init()
-			from colorama import Fore, Back
+			from colorama import Fore, Back, Style
 		except:
 			data['settings']['coloredOutput'] = 'forcedFalse'
 
@@ -54,7 +54,7 @@ def xpToNextLevel(self):
 
 shop = {
 	'weapon': [
-		{'name': 'Деревянный меч', 'damage': 15, 'cost': ²0, 'minLevel': 0},
+		{'name': 'Деревянный меч', 'damage': 15, 'cost': 20, 'minLevel': 0},
 		{'name': 'Ржавый нож', 'damage': 20, 'cost': 50, 'minLevel': 2},
 	],
 
@@ -137,5 +137,21 @@ locations = [
 ]
 
 cls()
-# Main menu
-print(f'=== GOBLIN RPG ===')
+print(f'=== GOBLIN RPG ===\n\n[1] Продолжить\n[2] Новая игра\n[3] Настройки\n\n[0] Выход')
+inp = input('Введи номер пункта, который хочешь выбрать: ')
+
+cls()
+if inp == '1':
+    print('Куда отправимся?\n\n[1] Сражаться\n[2] Магазин\n[3] О герое\n[0] Главное меню\n\nВведи номер пункта, который хочешь выбрать: ')
+elif inp == '2':
+    if data['settings']['coloredOutput'] == "true":
+        inp = input(f'Чтобы начать новую игру, введи следующую фразу:\n\n{Fore.YELLOW}{Style.BRIGHT}Начиная новую игру, я понимаю, что весь мой прогресс будет потерян по причине перезаписи файла сохранения. Также я подтверждаю, что ознакомлен с политикой конфиденциальности, изложенной в файле privacy.md и поставляющейся вместе с данной программой. Ахаллай-махаллай, сим-салабим, сохранянус-удалянус.{Style.NORMAL}{Fore.WHITE}\n\n')
+        if inp == 'Начиная новую игру, я понимаю, что весь мой прогресс будет потерян по причине перезаписи файла сохранения. Также я подтверждаю, что ознакомлен с политикой конфиденциальности, изложенной в файле privacy.md и поставляющейся вместе с данной программой. Ахаллай-махаллай, сим-салабим, сохранянус-удалянус.':
+            pass
+elif inp == '3':
+    print('=== НАСТРОЙКИ ===\nПриятного дня.')
+elif inp == '0':
+    inp = input('Куда пошёл?!\n\n[1] "Ладно, ладно, уже возвращаюсь"\n[2] "В терминал"\n\nВведи номер пункта, которвй хочешт выбрать: ')
+    cls()
+    if inp == '2':
+        exit()
